@@ -15,7 +15,7 @@ BEGIN {
 	}
 }
 
-use Test::More tests => 39;
+use Test::More tests => 47;
 use Image::Math::Constrain;
 
 
@@ -38,13 +38,14 @@ sub ok_constrain {
 
 # A zillion variants of the legal way to create a new constrain object
 my @tests = (
-	[ [ 800, 600 ], 800, 600     ],
-	[ [ 800, 600 ], 800, 600     ],
-	[ [ 800, 600 ], [ 800, 600 ] ],
-	[ [ 800, 600 ], '800x600'    ],
-	[ [ 800, 600 ], '800w600h'   ],
-	[ [ 800, 0   ], '800w'       ],
-	[ [ 0,   0   ], '0x0'        ],
+	[ [ 800, 600 ], 800, 600             ],
+	[ [ 800, 600 ], 800, 600             ],
+	[ [ 800, 600 ], [ 800, 600 ]         ],
+	[ [ 800, 600 ], 'constrain(800x600)' ],
+	[ [ 800, 600 ], '800x600'            ],
+	[ [ 800, 600 ], '800w600h'           ],
+	[ [ 800, 0   ], '800w'               ],
+	[ [ 0,   0   ], '0x0'                ],
 	);
 
 foreach my $test ( @tests ) {
@@ -71,5 +72,13 @@ is_deeply( $hash, { width => 80, height => 60, scale => 0.1 },
 @list = $Math->constrain( 40, 60 );
 is_deeply( \@list, [ 40, 60, 1 ], '->constrain returns correctly in list context' );
 
+
+
+
+
+# Other miscellaneous things
+ok( $Math, 'An object is true' );
+is( $Math->as_string, 'constrain(80x100)', '->as_string works correctly' );
+is( "$Math", 'constrain(80x100)', '->as_string is the auto-stringification method' );
 
 exit(0);

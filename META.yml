@@ -1,5 +1,5 @@
 name: Image-Math-Constrain
-version: 0.01
+version: 0.02
 abstract: Scaling math used to constrain image sizes (like thumbnails)
 author: Adam Kennedy<cpan@ali.as>
 license: perl

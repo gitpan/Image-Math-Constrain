@@ -35,10 +35,15 @@ as for thumbnails)
   $Math = Image::Math::Constrain->new(100);
   
   # Various string forms to do the same thing
+  $Math = Image::Math::Constrain->new('constrain(800x600)');
   $Math = Image::Math::Constrain->new('300x200');
   $Math = Image::Math::Constrain->new('300w200h');
   $Math = Image::Math::Constrain->new('100w');
   $Math = Image::Math::Constrain->new('100h');
+  
+  # Serialises back to 'constrain(800x600)'.
+  # You can use this to store the object if you wish.
+  my $string = $Math->as_string;
 
 =head1 DESCRIPTION
 
@@ -61,10 +66,12 @@ this for it's math.
 =cut
 
 use strict;
+use overload 'bool' => sub () { 1 },
+             '""'   => 'as_string';
 
 use vars qw{$VERSION};
 BEGIN {
-	$VERSION = '0.01';
+	$VERSION = '0.02';
 }
 
 
@@ -104,6 +111,9 @@ constrains as zero width and zero height, and the math object will not
 attempt to do any scaling, always returning the input width/height,
 and a scaling value of 1.
 
+Once created, the object is fully Storable and re-usable and does not
+store any state information from a single calculation run.
+
 Returns a new Image::Math::Constrain object, or C<undef> if the
 constraints have been defined wrongly.
 
@@ -120,10 +130,17 @@ sub new {
 		}
 		return undef if ref $value;
 		$value =~ s/\s//g;
-		return $class->new("$1", "$2") if $value =~ /^(\d+)x(\d+)$/;  # 800x600
-		return $class->new("$1", "$2") if $value =~ /^(\d+)w(\d+)h$/; # 800w600h
-		return $class->new("$1", 0)    if $value =~ /^(\d+)w$/; # 800w (width only)
-		return $class->new(0, "$1")    if $value =~ /^(\d+)h$/; # 800h (height only)
+		# constrain(800x600)
+		return $class->new("$1", "$2") if $value =~ /^constrain\((\d+)x(\d+)\)$/;
+		# 800x600
+		return $class->new("$1", "$2") if $value =~ /^(\d+)x(\d+)$/;
+		# 800w600h
+		return $class->new("$1", "$2") if $value =~ /^(\d+)w(\d+)h$/;
+		# 800w (width only)
+		return $class->new("$1", 0)    if $value =~ /^(\d+)w$/;
+		# 800h (height only)
+		return $class->new(0, "$1")    if $value =~ /^(\d+)h$/;
+		# 800 (meaning 800x800)
 		if ( $class->_non_neg_int($value) ) {
 			return $class->new($value, $value);
 		}
@@ -138,6 +155,8 @@ sub new {
 	$self;
 }
 
+###------------------------------------------------------------------
+
 =pod
 
 =head2 width
@@ -150,6 +169,8 @@ Returns a positive integer, or zero if there is no width constraint.
 
 sub width  { $_[0]->{width} }
 
+###------------------------------------------------------------------
+
 =pod
 
 =head2 height
@@ -161,6 +182,28 @@ Returns a positive integer, or zero if there is no height constraint.
 =cut
 
 sub height { $_[0]->{height} }
+
+###------------------------------------------------------------------
+
+=pod
+
+=head2 as_string
+
+The C<as_string> method returns the constrain rule as a string in the
+format 'constrain(123x123)'. This string form is also supported by the
+constructor and so it provides a good way to serialise the constrain
+rule, should you ever need to do so.
+
+As this value is not localisable, it should never really be shown to the
+user directly, unless you are sure you will never add i18n to your app.
+
+=cut
+
+sub as_string {
+	"constrain($_[0]->{width}x$_[0]->{height})";
+}
+
+###------------------------------------------------------------------
 
 =pod
 
@@ -228,7 +271,7 @@ sub constrain {
 #####################################################################
 # Support Methods
 
-# Non-negative integer
+# Validate a non-negative integer
 sub _non_neg_int {
 	my $value = defined $_[1] ? $_[1] : return '';
 	return '' if ref $value;
@@ -236,14 +279,14 @@ sub _non_neg_int {
 	!! $value =~ /^[1-9]\d*$/;
 }
 
-# Positive integer
+# Validate a positive integer
 sub _pos_int {
 	my $value = defined $_[1] ? $_[1] : return '';
 	return '' if ref $value;
 	!! $value =~ /^[1-9]\d*$/;
 }
 
-# Clean up the return value
+# Return as either a list or HASH reference
 sub _ret_val {
 	my $self = shift;
 	shift(@_) ? @_ # wantarray
@@ -256,7 +299,7 @@ sub _ret_val {
 
 =head1 TO DO
 
-- Write unit tests
+- Write more special-case unit tests
 
 =head1 SUPPORT
 
