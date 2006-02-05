@@ -1,5 +1,9 @@
 Revision history for Perl extension Image::Math::Constrain
 
+1.01 Sun Feb  5 2006
+	- Upgrading installer to Module::Install 0.55
+	- No other module changes
+
 1.00 Mon Jul 25 2005
 	- CPAN #13553 Applied doc fixes from qef at ungwe dot org
 	- Incrementing to stable version number

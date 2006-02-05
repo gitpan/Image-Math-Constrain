@@ -67,13 +67,14 @@ this for its math.
 
 =cut
 
+use 5.005;
 use strict;
 use overload 'bool' => sub () { 1 },
              '""'   => 'as_string';
 
 use vars qw{$VERSION};
 BEGIN {
-	$VERSION = '1.00';
+	$VERSION = '1.01';
 }
 
 
@@ -316,14 +317,14 @@ For other issues, contact the maintainer
 
 =head1 AUTHORS
 
-Adam Kennedy (Maintainer), L<http://ali.as/>, cpan@ali.as
+Adam Kennedy E<lt>cpan@ali.asE<gt>, L<http://ali.as/>
 
 Thank you to Phase N (L<http://phase-n.com/>) for permitting
 the open sourcing and release of this distribution.
 
 =head1 COPYRIGHT
 
-Copyright (c) 2004 - 2005 Adam Kennedy. All rights reserved.
+Copyright (c) 2004 - 2006 Adam Kennedy. All rights reserved.
 
 This program is free software; you can redistribute
 it and/or modify it under the same terms as Perl itself.

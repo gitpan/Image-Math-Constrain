@@ -150,13 +150,13 @@ SUPPORT
     For other issues, contact the maintainer
 
 AUTHORS
-    Adam Kennedy (Maintainer), <http://ali.as/>, cpan@ali.as
+    Adam Kennedy <cpan@ali.as>, <http://ali.as/>
 
     Thank you to Phase N (<http://phase-n.com/>) for permitting the open
     sourcing and release of this distribution.
 
 COPYRIGHT
-    Copyright (c) 2004 - 2005 Adam Kennedy. All rights reserved.
+    Copyright (c) 2004 - 2006 Adam Kennedy. All rights reserved.
 
     This program is free software; you can redistribute it and/or modify it
     under the same terms as Perl itself.

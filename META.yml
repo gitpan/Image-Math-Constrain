@@ -1,15 +1,17 @@
-name: Image-Math-Constrain
-version: 1.00
-abstract: Scaling math used to constrain image sizes (like thumbnails)
-author: Adam Kennedy<cpan@ali.as>
-license: perl
+
+no_index: 
+  directory: 
+    - inc
+    - t
+generated_by: Module::Install version 0.55
 distribution_type: module
-build_requires:
+version: 1.01
+name: Image-Math-Constrain
+author: Adam Kennedy <cpan@ali.as>, L<http://ali.as/>
+license: perl
+build_requires: 
   Test::More: 0.47
   File::Spec: 0.82
-requires:
+requires: 
   perl: 5.005
-no_index:
-  directory:
-    - inc
-generated_by: Module::Install version 0.36
+abstract: Scaling math used in image size constraining (such
